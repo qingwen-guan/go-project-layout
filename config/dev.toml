@@ -1,0 +1,5 @@
+app_name = "main_dev"
+log_dirs = [
+    "stdout",
+    "log/dev",
+]

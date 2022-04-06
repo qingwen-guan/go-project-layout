@@ -1,0 +1,28 @@
+package config
+
+import (
+	"fmt"
+	"os"
+	"strings"
+
+	"github.com/BurntSushi/toml"
+)
+
+type Config struct {
+	AppName string   `toml:"app_name"`
+	LogDirs []string `toml:"log_dirs"`
+}
+
+func NewConfigFromFile(filepath string) *Config {
+	conf := &Config{}
+	if _, err := toml.DecodeFile(filepath, conf); err != nil {
+		fmt.Fprintf(os.Stderr, "failed to decode config file %s\n", filepath)
+		os.Exit(1)
+	}
+
+	if conf.AppName == "" {
+		parts := strings.Split(os.Args[0], "/")
+		conf.AppName = parts[len(parts)-1]
+	}
+	return conf
+}

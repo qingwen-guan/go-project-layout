@@ -1,0 +1,5 @@
+app_name = "main_online"
+
+log_dirs = [
+    "log/online",
+]

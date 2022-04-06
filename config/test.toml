@@ -1,0 +1,5 @@
+app_name = "main_test"
+
+log_dirs = [
+    "log/test",
+]
