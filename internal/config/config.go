@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"os"
 	"strings"
 
@@ -13,16 +12,15 @@ type Config struct {
 	LogDirs []string `toml:"log_dirs"`
 }
 
-func NewConfigFromFile(filepath string) *Config {
+func NewConfigFromFile(filepath string) (*Config, error) {
 	conf := &Config{}
 	if _, err := toml.DecodeFile(filepath, conf); err != nil {
-		fmt.Fprintf(os.Stderr, "failed to decode config file %s\n", filepath)
-		os.Exit(1)
+		return conf, err
 	}
 
 	if conf.AppName == "" {
 		parts := strings.Split(os.Args[0], "/")
 		conf.AppName = parts[len(parts)-1]
 	}
-	return conf
+	return conf, nil
 }

@@ -2,6 +2,8 @@ package main
 
 import (
 	"flag"
+	"fmt"
+	"os"
 
 	"github.com/qingwen-guan/go-project-layout/internal/config"
 	service "github.com/qingwen-guan/go-project-layout/internal/service/subservice"
@@ -12,8 +14,13 @@ func main() {
 	confFilePath := flag.String("config", "", "toml config file")
 	flag.Parse()
 
-	conf := config.NewConfigFromFile(*confFilePath)
+	conf, err := config.NewConfigFromFile(*confFilePath)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "failed to decode config file %s, err=%s\n", *confFilePath, err.Error())
+		os.Exit(1)
+	}
 	logger := telemetry.NewZapLogger(conf)
+	defer logger.Sync()
 
 	logger.Info("init")
 
